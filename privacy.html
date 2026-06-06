@@ -37,7 +37,7 @@
   .nav-inner{display:flex;align-items:center;justify-content:space-between}
   .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:1.25rem;color:var(--text)}
   .logo .dot{color:var(--lime)}
-  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links{display:flex;gap:28px;align-items:center}
   .nav-links a{font-size:.95rem;color:var(--muted);font-weight:500;transition:color .2s}
   .nav-links a:hover{color:var(--text)}
   .nav-links a.active{color:var(--lime)}
@@ -45,6 +45,7 @@
   .btn-primary{background:var(--lime);color:#fff;box-shadow:0 0 0 0 rgba(241,146,2,.4)}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(241,146,2,.55)}
   .nav-cta{display:flex;gap:12px;align-items:center}
+  .t-short{display:none}
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
   .burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
 
@@ -89,7 +90,9 @@
     .nav-links.open{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);padding:24px;gap:18px;border-bottom:1px solid var(--line)}
   }
   @media(max-width:600px){
-    .nav-cta .btn{display:none}
+    .nav-cta .btn{padding:9px 14px;font-size:.86rem}
+    .t-full{display:none}
+    .t-short{display:inline}
     .legal-head{padding:130px 0 40px}
   }
 </style>
@@ -108,11 +111,12 @@
       <a href="/#how">How it works</a>
       <a href="/#features">Features</a>
       <a href="/#team">Team</a>
-      <a href="/#signup">Stay updated</a>
+      <a href="/#join">Stay updated</a>
       <a href="/privacy.html" class="active">Privacy</a>
+      <a href="/support.html">Support</a>
     </div>
     <div class="nav-cta">
-      <a href="/#signup" class="btn btn-primary">Join the community</a>
+      <a href="/#join" class="btn btn-primary"><span class="t-full">Join the community</span><span class="t-short">Join community</span></a>
       <div class="burger" id="burger"><span></span><span></span><span></span></div>
     </div>
   </div>
@@ -232,7 +236,7 @@
       </div>
       <div class="foot-links">
         <div class="foot-col"><h5>Product</h5><a href="/#how">TrustScore</a><a href="/#features">Features</a><a href="/#download">Download</a></div>
-        <div class="foot-col"><h5>Company</h5><a href="/#team">Team</a><a href="/#rollout">Rollout</a><a href="/#problem">The problem</a><a href="/privacy.html">Privacy Policy</a></div>
+        <div class="foot-col"><h5>Company</h5><a href="/#team">Team</a><a href="/#rollout">Rollout</a><a href="/privacy.html">Privacy Policy</a><a href="/support.html">Support</a></div>
         <div class="foot-col"><h5>Connect</h5><a href="#">Become a contributor</a><a href="#">Partner with us</a><a href="#">Press</a></div>
       </div>
     </div>
