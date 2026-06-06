@@ -65,13 +65,14 @@
   .btn{
     display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:none;
     font-family:'Space Grotesk';font-weight:600;font-size:.98rem;
-    padding:13px 22px;border-radius:100px;transition:transform .18s ease, box-shadow .25s ease, background .2s;
+    padding:13px 22px;border-radius:100px;white-space:nowrap;transition:transform .18s ease, box-shadow .25s ease, background .2s;
   }
   .btn-primary{background:var(--lime);color:#ffffff;box-shadow:0 0 0 0 rgba(241,146,2,.4)}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(241,146,2,.55)}
   .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
   .btn-ghost:hover{border-color:var(--lime);color:var(--lime)}
   .nav-cta{display:flex;gap:12px;align-items:center}
+  .t-short{display:none}
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
   .burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
 
@@ -79,7 +80,7 @@
   .hero{padding:170px 0 90px;overflow:hidden}
   .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:start}
   .hero-right{display:flex;flex-direction:column;gap:28px;align-items:stretch}
-  .hero-signup{width:100%}
+  .hero-signup{width:100%;scroll-margin-top:90px}
   .hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:700;margin:22px 0 0}
   .hero h1 .hl{color:var(--lime);position:relative}
   .hero .sub{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--muted);max-width:520px;margin:24px 0 34px}
@@ -266,7 +267,9 @@
     .hero{padding:140px 0 60px}
     .sec{padding:70px 0}
     .cta{padding:42px 28px}
-    .nav-cta .btn{display:none}
+    .nav-cta .btn{padding:10px 18px}
+    .t-full{display:none}
+    .t-short{display:inline}
     .hero-meta{gap:22px}
     .float-card{display:none}
   }
@@ -286,11 +289,11 @@
       <a href="#how">How it works</a>
       <a href="#features">Features</a>
       <a href="#team">Team</a>
-      <a href="#top">Stay updated</a>
+      <a href="#join">Stay updated</a>
       <a href="/privacy.html">Privacy</a>
     </div>
     <div class="nav-cta">
-      <a href="#top" class="btn btn-primary">Join the community</a>
+      <a href="#join" class="btn btn-primary"><span class="t-full">Join the community</span><span class="t-short">Join</span></a>
       <div class="burger" id="burger"><span></span><span></span><span></span></div>
     </div>
   </div>
@@ -304,7 +307,7 @@
       <h1>Eat vegan <span class="hl">anywhere</span> — even where the menu doesn't say so.</h1>
       <p class="sub">VeganFinds finds the accidentally-vegan and adaptable dishes hiding in normal restaurants — so you can order with zero stress, zero awkwardness, and zero "is there ghee in this?"</p>
       <div class="store-row">
-        <a href="#download" class="store-btn">
+        <a href="#join" class="store-btn">
           <svg viewBox="0 0 24 24" fill="#f19202"><path d="M3.6 2.3c-.2.2-.3.5-.3.9v17.6c0 .4.1.7.3.9l.1.1 9.9-9.9v-.2L3.6 2.3zM17 15.3l-3.3-3.3 3.3-3.3 4 2.3c1.1.6 1.1 1.7 0 2.3l-4 2zM13.2 11.7l3.3 3.3-9.6 5.5c-.4.2-.8.2-1.1 0l7.4-8.8zM5.8 2.5c.3-.2.7-.2 1.1 0l9.6 5.5-3.3 3.3-7.4-8.8z"/></svg>
           <span><span class="st-small">Get it on</span><span class="st-big">Google Play</span></span>
         </a>
@@ -316,7 +319,7 @@
     </div>
 
     <div class="hero-right">
-      <div class="signup-card hero-signup reveal">
+      <div class="signup-card hero-signup reveal" id="join">
         <div class="form-title">The app is rolling out soon</div>
         <div class="form-sub">Join the community for early updates — be first to know the moment we launch in your city.</div>
         <div class="field">
@@ -570,7 +573,7 @@
         <h2>Your next meal out, sorted.</h2>
         <p>Join the vegans eating confidently at mainstream restaurants — no labels, no awkwardness, no guesswork. Get VeganFinds.</p>
         <div class="store-row">
-          <a href="#" class="store-btn">
+          <a href="#join" class="store-btn">
             <svg viewBox="0 0 24 24" fill="#f19202"><path d="M3.6 2.3c-.2.2-.3.5-.3.9v17.6c0 .4.1.7.3.9l.1.1 9.9-9.9v-.2L3.6 2.3zM17 15.3l-3.3-3.3 3.3-3.3 4 2.3c1.1.6 1.1 1.7 0 2.3l-4 2zM13.2 11.7l3.3 3.3-9.6 5.5c-.4.2-.8.2-1.1 0l7.4-8.8zM5.8 2.5c.3-.2.7-.2 1.1 0l9.6 5.5-3.3 3.3-7.4-8.8z"/></svg>
             <span><span class="st-small">Get it on</span><span class="st-big">Google Play</span></span>
           </a>
