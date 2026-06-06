@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VeganFinds — Eat vegan anywhere</title>
+<meta name="description" content="VeganFinds helps vegans discover accidentally-vegan and adaptable dishes in mainstream restaurants — with a community-powered TrustScore and AI menu scanning." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-2:#F6F3EC;
+    --card:#FFFFFF;
+    --card-2:#FBF8F2;
+    --line:rgba(20,20,20,.12);
+    --lime:#f19202;        /* accent (orange) */
+    --lime-bright:#ff9f1a;
+    --lime-soft:#d97f00;
+    --mint:#f7b34d;
+    --cream:#0A0A0A;
+    --text:#0A0A0A;
+    --muted:#3F3F3F;
+    --muted-2:#7A7A75;
+    --radius:22px;
+    --radius-lg:32px;
+    --maxw:1140px;
+    --shadow:0 1px 3px rgba(20,20,20,.05),0 8px 24px -16px rgba(20,20,20,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;line-height:1.03;color:var(--text)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{position:relative}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--lime);
+  }
+  .eyebrow::before{content:"";width:18px;height:2px;background:var(--lime);border-radius:2px}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    transition:background .3s ease, border-color .3s ease, padding .3s ease;
+    padding:18px 0;border-bottom:1px solid transparent;
+  }
+  nav.scrolled{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 0}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:1.25rem;color:var(--text)}
+  .logo .dot{color:var(--lime)}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{font-size:.95rem;color:var(--muted);font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:none;
+    font-family:'Space Grotesk';font-weight:600;font-size:.98rem;
+    padding:13px 22px;border-radius:100px;transition:transform .18s ease, box-shadow .25s ease, background .2s;
+  }
+  .btn-primary{background:var(--lime);color:#ffffff;box-shadow:0 0 0 0 rgba(241,146,2,.4)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(241,146,2,.55)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--lime);color:var(--lime)}
+  .nav-cta{display:flex;gap:12px;align-items:center}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
+  .burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:170px 0 90px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:700;margin:22px 0 0}
+  .hero h1 .hl{color:var(--lime);position:relative}
+  .hero .sub{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--muted);max-width:520px;margin:24px 0 34px}
+  .store-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .store-btn{
+    display:inline-flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);
+    padding:11px 20px;border-radius:16px;transition:.2s;box-shadow:var(--shadow)
+  }
+  .store-btn:hover{border-color:var(--lime);transform:translateY(-2px)}
+  .store-btn svg{width:24px;height:24px}
+  .store-btn .st-small{font-size:.66rem;color:var(--muted);line-height:1;text-transform:uppercase;letter-spacing:.08em}
+  .store-btn .st-big{font-family:'Space Grotesk';font-weight:600;font-size:1.02rem;line-height:1.25;color:var(--text)}
+  .hero-meta{display:flex;gap:30px;margin-top:34px;flex-wrap:wrap}
+  .hero-meta .m-num{font-family:'Space Grotesk';font-weight:700;font-size:1.5rem;color:var(--text)}
+  .hero-meta .m-lab{font-size:.82rem;color:var(--muted)}
+  .badge-pill{
+    display:inline-flex;align-items:center;gap:9px;background:rgba(241,146,2,.10);
+    border:1px solid var(--line);color:var(--lime);padding:7px 15px;border-radius:100px;font-size:.82rem;font-weight:600
+  }
+  .badge-pill .pulse{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(241,146,2,.7);animation:pulse 2.2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(241,146,2,.6)}70%{box-shadow:0 0 0 10px rgba(241,146,2,0)}100%{box-shadow:0 0 0 0 rgba(241,146,2,0)}}
+
+  /* phone */
+  .phone-stage{position:relative;display:flex;justify-content:center}
+  .glow{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,247,61,.45),transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(14px);z-index:0}
+  .phone{position:relative;z-index:2;width:300px;filter:drop-shadow(0 40px 80px rgba(20,30,15,.45))}
+  .float-card{
+    position:absolute;z-index:3;background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:12px 15px;display:flex;align-items:center;gap:10px;box-shadow:0 14px 36px -14px rgba(20,20,20,.22)
+  }
+  .float-card .fc-ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+  .float-card .fc-t{font-family:'Space Grotesk';font-weight:600;font-size:.9rem;color:var(--text)}
+  .float-card .fc-s{font-size:.72rem;color:var(--muted)}
+  .fc-1{top:64px;left:-18px;animation:floaty 5s ease-in-out infinite}
+  .fc-2{bottom:90px;right:-26px;animation:floaty 6s ease-in-out infinite .8s}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;overflow:hidden;background:var(--bg-2)}
+  .marquee-track{display:flex;gap:46px;white-space:nowrap;width:max-content;animation:scroll 26s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-track span{font-family:'Space Grotesk';font-weight:600;font-size:1.05rem;color:var(--muted);display:inline-flex;align-items:center;gap:46px}
+  .marquee-track span::after{content:"●";color:var(--lime);font-size:.6rem}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ---------- SECTION SHELL ---------- */
+  .sec{padding:100px 0}
+  .sec-head{max-width:680px;margin-bottom:54px}
+  .sec-head h2{font-size:clamp(2rem,4vw,3.1rem);font-weight:700;margin:16px 0 0}
+  .sec-head p{color:var(--muted);font-size:1.08rem;margin-top:18px}
+
+  /* ---------- PROBLEM ---------- */
+  .prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .prob-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:30px;transition:.25s;box-shadow:var(--shadow)}
+  .prob-card:hover{transform:translateY(-4px);border-color:rgba(241,146,2,.55)}
+  .prob-num{font-family:'Space Grotesk';font-weight:700;font-size:2.4rem;color:var(--lime);opacity:.85;line-height:1}
+  .prob-card h3{font-size:1.25rem;margin:14px 0 10px;font-weight:600;color:var(--text)}
+  .prob-card p{color:var(--muted);font-size:.96rem}
+  .stat-strip{display:flex;gap:18px;margin-top:36px;flex-wrap:wrap}
+  .stat-box{flex:1;min-width:200px;background:linear-gradient(160deg,rgba(241,146,2,.10),transparent);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+  .stat-box .big{font-family:'Space Grotesk';font-weight:700;font-size:2.6rem;color:var(--lime)}
+  .stat-box .lab{color:var(--muted);font-size:.95rem;margin-top:4px}
+
+  /* ---------- HOW / TRUSTSCORE ---------- */
+  .how{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .how-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+  .layers{display:flex;flex-direction:column;gap:16px}
+  .layer{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;position:relative;transition:.25s;box-shadow:var(--shadow)}
+  .layer:hover{border-color:rgba(241,146,2,.55);transform:translateX(6px)}
+  .layer .l-step{font-family:'Space Grotesk';font-weight:700;font-size:1.05rem;color:#ffffff;background:var(--lime);width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+  .layer h4{font-size:1.12rem;font-weight:600;margin-bottom:6px;color:var(--text)}
+  .layer p{color:var(--muted);font-size:.93rem}
+  .score-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:34px;text-align:center;box-shadow:var(--shadow)}
+  .ring{position:relative;width:200px;height:200px;margin:0 auto 22px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .ring-num{position:absolute;inset:0;display:grid;place-items:center;flex-direction:column}
+  .ring .ring-num b{font-family:'Space Grotesk';font-size:3rem;font-weight:700;color:var(--lime)}
+  .ring .ring-num small{display:block;color:var(--muted);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-top:-6px}
+  .score-card h4{font-size:1.3rem;font-weight:600;margin-bottom:8px;color:var(--text)}
+  .score-card p{color:var(--muted);font-size:.95rem}
+  .ai-banner{display:flex;gap:18px;align-items:center;margin-top:24px;background:linear-gradient(135deg,rgba(241,146,2,.12),transparent);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px}
+  .ai-banner .ai-ico{width:46px;height:46px;border-radius:13px;background:rgba(241,146,2,.14);display:grid;place-items:center;flex-shrink:0}
+  .ai-banner h4{font-size:1.05rem;font-weight:600;color:var(--text)}
+  .ai-banner p{color:var(--muted);font-size:.9rem}
+
+  /* ---------- FEATURES ---------- */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:30px;transition:.25s;box-shadow:var(--shadow)}
+  .feat:hover{transform:translateY(-4px);border-color:rgba(241,146,2,.55);background:var(--card-2)}
+  .feat .f-ico{width:54px;height:54px;border-radius:15px;background:rgba(241,146,2,.12);display:grid;place-items:center;margin-bottom:18px}
+  .feat h3{font-size:1.18rem;font-weight:600;margin-bottom:9px;color:var(--text)}
+  .feat p{color:var(--muted);font-size:.95rem}
+
+  /* ---------- GEOGRAPHY ---------- */
+  .geo{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .geo-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+  .roadmap{display:flex;flex-direction:column;gap:0}
+  .road-item{display:flex;gap:20px;padding-bottom:30px;position:relative}
+  .road-item:not(:last-child)::before{content:"";position:absolute;left:13px;top:30px;bottom:0;width:2px;background:var(--line)}
+  .road-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex-shrink:0;z-index:2;background:var(--bg-2);font-size:.7rem;color:var(--muted)}
+  .road-item.active .road-dot{border-color:var(--lime);background:var(--lime);color:#ffffff}
+  .road-item h4{font-size:1.08rem;font-weight:600;color:var(--text)}
+  .road-item .r-tag{font-size:.74rem;color:var(--lime);font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  .road-item p{color:var(--muted);font-size:.92rem;margin-top:3px}
+  .geo-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow)}
+  .geo-card .quote{font-family:'Space Grotesk';font-size:1.45rem;font-weight:500;line-height:1.35;color:var(--text)}
+  .geo-card .quote .hl{color:var(--lime)}
+  .geo-card .by{margin-top:22px;color:var(--muted);font-size:.92rem}
+
+  /* ---------- TEAM ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .member{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:.25s;box-shadow:var(--shadow)}
+  .member:hover{transform:translateY(-4px);border-color:rgba(241,146,2,.55)}
+  .avatar{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:1.4rem;color:#ffffff;margin-bottom:16px}
+  .member h3{font-size:1.15rem;font-weight:600;color:var(--text)}
+  .member .role{color:var(--lime);font-size:.85rem;font-weight:600;margin:3px 0 11px}
+  .member p{color:var(--muted);font-size:.9rem}
+
+  /* ---------- SIGNUP ---------- */
+  .signup{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .signup-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+  .signup-copy h2{font-size:clamp(2rem,4vw,3.1rem);font-weight:700;margin:16px 0 0}
+  .signup-copy p{color:var(--muted);font-size:1.08rem;margin-top:18px;max-width:480px}
+  .signup-list{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:12px}
+  .signup-list li{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.96rem}
+  .signup-list li svg{flex-shrink:0}
+  .signup-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow)}
+  .signup-card .form-title{font-family:'Space Grotesk';font-weight:700;font-size:1.3rem;margin-bottom:6px;color:var(--text)}
+  .signup-card .form-sub{color:var(--muted);font-size:.92rem;margin-bottom:24px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-family:'Space Grotesk';font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:7px}
+  .field input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-family:'Inter';font-size:1rem;color:var(--text);transition:border-color .2s, box-shadow .2s}
+  .field input::placeholder{color:var(--muted-2)}
+  .field input:focus{outline:none;border-color:var(--lime);box-shadow:0 0 0 3px rgba(241,146,2,.15)}
+  .signup-card .btn-primary{width:100%;justify-content:center;margin-top:6px}
+  .form-note{font-size:.8rem;color:var(--muted-2);margin-top:14px;text-align:center}
+  .form-note a{color:var(--lime);font-weight:600}
+  .form-msg{margin-top:16px;padding:12px 16px;border-radius:12px;font-size:.92rem;display:none}
+  .form-msg.ok{display:block;background:rgba(143,227,160,.16);color:#2e7d4f;border:1px solid rgba(143,227,160,.45)}
+  .form-msg.err{display:block;background:rgba(214,69,42,.10);color:#c0392b;border:1px solid rgba(214,69,42,.30)}
+
+  /* ---------- CTA ---------- */
+  .cta-wrap{padding:110px 0}
+  .cta{background:linear-gradient(140deg,var(--lime),var(--lime-soft));border-radius:var(--radius-lg);padding:64px 56px;position:relative;overflow:hidden;color:#ffffff}
+  .cta::after{content:"";position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.16)}
+  .cta-inner{position:relative;z-index:2;max-width:620px}
+  .cta h2{font-size:clamp(2.1rem,4.5vw,3.3rem);font-weight:700;color:#ffffff}
+  .cta p{font-size:1.1rem;margin:18px 0 30px;color:rgba(255,255,255,.92)}
+  .cta .store-btn{background:#ffffff;border-color:#ffffff;color:var(--text);box-shadow:none}
+  .cta .store-btn:hover{transform:translateY(-2px)}
+  .cta .store-btn .st-small{color:var(--muted)}
+  .cta .store-btn .st-big{color:var(--text)}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:54px 0 40px;border-top:1px solid var(--line)}
+  .foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+  .foot-grid p{color:var(--muted);font-size:.92rem;max-width:300px;margin-top:14px}
+  .foot-links{display:flex;gap:60px;flex-wrap:wrap}
+  .foot-col h5{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted-2);margin-bottom:14px}
+  .foot-col a{display:block;color:var(--muted);font-size:.94rem;margin-bottom:9px;transition:.2s}
+  .foot-col a:hover{color:var(--lime)}
+  .foot-bottom{margin-top:44px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted-2);font-size:.86rem}
+
+  /* reveal (only hidden when JS is active, so content never disappears on script failure) */
+  .js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .js .reveal{opacity:1;transform:none;transition:none}
+    .marquee-track,.fc-1,.fc-2,.pulse{animation:none !important}
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:900px){
+    .hero-grid,.how-grid,.geo-grid,.signup-grid{grid-template-columns:1fr}
+    .phone-stage{order:-1;margin-bottom:20px}
+    .prob-grid,.feat-grid,.team-grid{grid-template-columns:1fr 1fr}
+    .nav-links{display:none}
+    .burger{display:flex}
+    .nav-links.open{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);padding:24px;gap:18px;border-bottom:1px solid var(--line)}
+  }
+  @media(max-width:600px){
+    .prob-grid,.feat-grid,.team-grid{grid-template-columns:1fr}
+    .hero{padding:140px 0 60px}
+    .sec{padding:70px 0}
+    .cta{padding:42px 28px}
+    .nav-cta .btn-ghost{display:none}
+    .hero-meta{gap:22px}
+    .float-card{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 26C14 26 4 19 4 11.5C4 7 7.5 4 11 4c1.8 0 3 .9 3 .9S15.2 4 17 4c3.5 0 7 3 7 7.5C24 19 14 26 14 26Z" fill="#f19202"/><path d="M14 25C14 13 9 9 5 8" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Vegan<span class="dot">Finds</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#problem">The Problem</a>
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#team">Team</a>
+      <a href="#signup">Stay updated</a>
+      <a href="/privacy.html">Privacy</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#how" class="btn btn-ghost">See the magic</a>
+      <a href="#download" class="btn btn-primary">Get the app</a>
+      <div class="burger" id="burger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="badge-pill"><span class="pulse"></span>Vegan for 20 years built this</span>
+      <h1>Eat vegan <span class="hl">anywhere</span> — even where the menu doesn't say so.</h1>
+      <p class="sub">VeganFinds finds the accidentally-vegan and adaptable dishes hiding in normal restaurants — so you can order with zero stress, zero awkwardness, and zero "is there ghee in this?"</p>
+      <div class="store-row">
+        <a href="#download" class="store-btn">
+          <svg viewBox="0 0 24 24" fill="#f19202"><path d="M3.6 2.3c-.2.2-.3.5-.3.9v17.6c0 .4.1.7.3.9l.1.1 9.9-9.9v-.2L3.6 2.3zM17 15.3l-3.3-3.3 3.3-3.3 4 2.3c1.1.6 1.1 1.7 0 2.3l-4 2zM13.2 11.7l3.3 3.3-9.6 5.5c-.4.2-.8.2-1.1 0l7.4-8.8zM5.8 2.5c.3-.2.7-.2 1.1 0l9.6 5.5-3.3 3.3-7.4-8.8z"/></svg>
+          <span><span class="st-small">Get it on</span><span class="st-big">Google Play</span></span>
+        </a>
+      </div>
+      <div class="hero-meta">
+        <div><div class="m-num">&lt;5%</div><div class="m-lab">of eateries label vegan options</div></div>
+        <div><div class="m-num">3-layer</div><div class="m-lab">TrustScore on every dish</div></div>
+      </div>
+    </div>
+
+    <div class="phone-stage">
+      <div class="glow"></div>
+      <!-- PHONE (app screen kept as-is) -->
+      <svg class="phone" viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VeganFinds app screen">
+        <defs>
+          <linearGradient id="screenbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F140F"/><stop offset="1" stop-color="#141A14"/></linearGradient>
+          <clipPath id="screen"><rect x="14" y="14" width="272" height="572" rx="40"/></clipPath>
+        </defs>
+        <rect x="2" y="2" width="296" height="596" rx="52" fill="#05070500" stroke="#2A332A" stroke-width="3"/>
+        <rect x="8" y="8" width="284" height="584" rx="46" fill="#1A221A"/>
+        <rect x="14" y="14" width="272" height="572" rx="40" fill="url(#screenbg)"/>
+        <g clip-path="url(#screen)">
+          <!-- status bar -->
+          <text x="34" y="46" fill="#ECEFE8" font-family="Space Grotesk" font-size="13" font-weight="600">9:41</text>
+          <circle cx="252" cy="42" r="3" fill="#969E94"/><circle cx="262" cy="42" r="3" fill="#969E94"/><rect x="270" y="38" width="9" height="8" rx="1.5" fill="#C9F73D"/>
+          <!-- header -->
+          <text x="34" y="86" fill="#969E94" font-family="Inter" font-size="11">📍 Near you · Auroville</text>
+          <text x="34" y="112" fill="#ECEFE8" font-family="Space Grotesk" font-size="20" font-weight="700">Sri Krishna Bhavan</text>
+          <rect x="34" y="124" width="86" height="22" rx="11" fill="rgba(201,247,61,.14)"/>
+          <text x="46" y="139" fill="#C9F73D" font-family="Inter" font-size="10.5" font-weight="600">12 vegan picks</text>
+
+          <!-- dish 1 -->
+          <rect x="22" y="162" width="256" height="74" rx="16" fill="#1A221A"/>
+          <circle cx="50" cy="190" r="14" fill="rgba(201,247,61,.16)"/>
+          <path d="M44 190 l4 4 l8 -9" stroke="#C9F73D" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="74" y="186" fill="#ECEFE8" font-family="Space Grotesk" font-size="14" font-weight="600">Idli &amp; Sambar</text>
+          <text x="74" y="204" fill="#969E94" font-family="Inter" font-size="10.5">Accidentally vegan · ₹60</text>
+          <rect x="74" y="212" width="64" height="18" rx="9" fill="rgba(143,227,160,.15)"/>
+          <text x="82" y="225" fill="#8FE3A0" font-family="Inter" font-size="9.5" font-weight="600">Trust 96%</text>
+
+          <!-- dish 2 (adaptable) -->
+          <rect x="22" y="246" width="256" height="86" rx="16" fill="#1A221A" stroke="rgba(201,247,61,.25)" stroke-width="1"/>
+          <circle cx="50" cy="274" r="14" fill="rgba(216,255,85,.14)"/>
+          <path d="M50 268 v8 M50 281 v.2" stroke="#D8FF55" stroke-width="2.6" stroke-linecap="round"/>
+          <text x="74" y="270" fill="#ECEFE8" font-family="Space Grotesk" font-size="14" font-weight="600">Veg Fried Rice</text>
+          <text x="74" y="288" fill="#969E94" font-family="Inter" font-size="10.5">Adaptable · ₹140</text>
+          <rect x="74" y="298" width="186" height="24" rx="8" fill="rgba(201,247,61,.08)"/>
+          <text x="83" y="314" fill="#C9F73D" font-family="Inter" font-size="9.5">Say: "No butter, no paneer" 🗣️</text>
+
+          <!-- dish 3 -->
+          <rect x="22" y="342" width="256" height="74" rx="16" fill="#1A221A"/>
+          <circle cx="50" cy="370" r="14" fill="rgba(201,247,61,.16)"/>
+          <path d="M44 370 l4 4 l8 -9" stroke="#C9F73D" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="74" y="366" fill="#ECEFE8" font-family="Space Grotesk" font-size="14" font-weight="600">Lemon Rice</text>
+          <text x="74" y="384" fill="#969E94" font-family="Inter" font-size="10.5">Accidentally vegan · ₹90</text>
+          <rect x="74" y="392" width="64" height="18" rx="9" fill="rgba(143,227,160,.15)"/>
+          <text x="82" y="405" fill="#8FE3A0" font-family="Inter" font-size="9.5" font-weight="600">Trust 91%</text>
+
+          <!-- scan bar -->
+          <rect x="22" y="498" width="256" height="58" rx="18" fill="#C9F73D"/>
+          <path d="M48 519 h-6 v6 M62 519 h6 v6 M48 540 h-6 v-6 M62 540 h6 v-6" stroke="#0A0D0A" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <circle cx="55" cy="529.5" r="4.5" fill="#0A0D0A"/>
+          <text x="84" y="525" fill="#0A0D0A" font-family="Space Grotesk" font-size="14" font-weight="700">Scan this menu</text>
+          <text x="84" y="542" fill="#15300f" font-family="Inter" font-size="10">Not in our database? Let AI read it</text>
+        </g>
+        <!-- notch -->
+        <rect x="118" y="22" width="64" height="18" rx="9" fill="#0A0D0A"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Idli</span><span>Lemon rice</span><span>Dosa</span><span>Chana masala</span><span>Aloo gobi</span><span>Sambar</span><span>Coconut chutney</span><span>Veg fried rice</span>
+    <span>Idli</span><span>Lemon rice</span><span>Dosa</span><span>Chana masala</span><span>Aloo gobi</span><span>Sambar</span><span>Coconut chutney</span><span>Veg fried rice</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="sec" id="problem">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The real problem</span>
+      <h2>Going vegan is easy. Eating out as a vegan is the hard part.</h2>
+      <p>If you're vegan, you already know the drill. Menus don't label anything, "veg" doesn't mean vegan, and Google Maps lies. VeganFinds was built by someone who's navigated this for 20 years.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-card reveal">
+        <div class="prob-num">01</div>
+        <h3>Hidden, undiscoverable dishes</h3>
+        <p>Plenty of dishes are accidentally vegan — but nobody tells you. Even "veg" rice can be stored in dairy butter. You're guessing every single time.</p>
+      </div>
+      <div class="prob-card reveal">
+        <div class="prob-num">02</div>
+        <h3>The awkward group dinner</h3>
+        <p>Out with non-vegan friends, everyone's waiting, and you feel like a burden. So you rush, settle, or skip eating out entirely.</p>
+      </div>
+      <div class="prob-card reveal">
+        <div class="prob-num">03</div>
+        <h3>Misleading & "expensive" labels</h3>
+        <p>Maps point to veg, not vegan. Owners mislabel for footfall. And the few real vegan spots feel premium — making veganism look unaffordable.</p>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-box reveal"><div class="big">&lt;5%</div><div class="lab">of restaurants, cafés &amp; eateries have any vegan awareness or menu</div></div>
+      <div class="stat-box reveal"><div class="big">20 yrs</div><div class="lab">of lived vegan experience baked into the rule engine</div></div>
+      <div class="stat-box reveal"><div class="big">∞</div><div class="lab">menus made readable through AI + community data</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW / TRUSTSCORE -->
+<section class="sec how" id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">How VeganFinds knows</span>
+      <h2>Every dish earns a TrustScore.</h2>
+      <p>Not a vibe — a number. Each dish is scored across three layers that get sharper as the community grows. The bigger we get, the more accurate your next meal.</p>
+    </div>
+    <div class="how-grid">
+      <div class="layers">
+        <div class="layer reveal">
+          <div class="l-step">1</div>
+          <div><h4>Rule engine classification</h4><p>Our moat: 20 years of lived vegan knowledge, encoded. It reads public menus from Zomato &amp; Maps and flags vegan, adaptable, or not — exceptions included.</p></div>
+        </div>
+        <div class="layer reveal">
+          <div class="l-step">2</div>
+          <div><h4>Expert verification</h4><p>Our internal team and trusted vegan experts cross-check dishes and add exactly how to adapt each one. Verified dishes score higher.</p></div>
+        </div>
+        <div class="layer reveal">
+          <div class="l-step">3</div>
+          <div><h4>Community feedback</h4><p>You tell us if it was truly vegan, if counters were separate, if the cutlery smelled of dairy. Averaged across users, it keeps every score honest and live.</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="score-card reveal">
+          <div class="ring">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="86" fill="none" stroke="#ECE7DC" stroke-width="16"/>
+              <circle id="ringProg" cx="100" cy="100" r="86" fill="none" stroke="#f19202" stroke-width="16" stroke-linecap="round" stroke-dasharray="540" stroke-dashoffset="540"/>
+            </svg>
+            <div class="ring-num"><div><b>96%</b><small>TrustScore</small></div></div>
+          </div>
+          <h4>Order with total confidence</h4>
+          <p>A live, evolving accuracy score on every single dish — so you never have to interrogate a waiter again.</p>
+        </div>
+        <div class="ai-banner reveal">
+          <div class="ai-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3 3 3 0 0 0 0 6 3 3 0 0 0 3 3 3 3 0 0 0 6 0 3 3 0 0 0 3-3 3 3 0 0 0 0-6 3 3 0 0 0-3-3V6a3 3 0 0 0-3-3Z"/></svg>
+          </div>
+          <div><h4>Restaurant not in our database?</h4><p>Point your camera at the menu. Our AI — trained on the rule engine to cut hallucinations — tells you what's vegan and how to ask. Every scan feeds the database back.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec" id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">What you get</span>
+      <h2>Built for how you actually eat out.</h2>
+      <p>Open the app, pick where you are, and order. No toggling between five tabs of Happy Cow, Maps and reviews.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <div class="f-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3>Nearby, instantly</h3>
+        <p>GPS finds the eateries around you and renders a clean menu showing only vegan and adaptable dishes. Non-vegan items are hidden.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="f-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3Z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+        <h3>Exactly what to say</h3>
+        <p>Tap any adaptable dish for the precise customisation — in the local language — so the kitchen actually gets it right.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="f-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="8" y="8" width="8" height="8" rx="2"/></svg></div>
+        <h3>AI menu scanner</h3>
+        <p>No data on a place? Scan the physical menu and our AI, tuned by our rule engine, reads it dish by dish — with a clear AI disclaimer.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="f-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21l2.3-7.1-6-4.5h7.6L12 2Z"/></svg></div>
+        <h3>Honest TrustScore</h3>
+        <p>A transparent accuracy score on every dish — no inflated ratings, no mislabelled "vegan" spots to waste your evening.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="f-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M2 21v-1a5 5 0 0 1 10 0v1"/><path d="M16 3.1a3 3 0 0 1 0 5.8M21 21v-1a5 5 0 0 0-4-4.9"/></svg></div>
+        <h3>Powered by the community</h3>
+        <p>Every meal you log makes the app smarter for the next vegan. Real crowdsourced data, not paid placements.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="f-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h3>Affordable by default</h3>
+        <p>We surface everyday dishes at everyday prices — breaking the myth that being vegan has to be expensive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEOGRAPHY -->
+<section class="sec geo" id="rollout">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Where we're rolling out</span>
+      <h2>Starting where veganism already lives.</h2>
+    </div>
+    <div class="geo-grid">
+      <div class="roadmap">
+        <div class="road-item active reveal"><div class="road-dot">●</div><div><span class="r-tag">Now · Testing ground</span><h4>Auroville</h4><p>Home base — packed with resident vegans and vegan tourists from around the world.</p></div></div>
+        <div class="road-item reveal"><div class="road-dot"></div><div><span class="r-tag">Next</span><h4>Metro cities</h4><p>Mumbai, Chennai, Bangalore, Pune &amp; Coimbatore — India's densest vegan populations.</p></div></div>
+        <div class="road-item reveal"><div class="road-dot"></div><div><span class="r-tag">Then</span><h4>Travel hotspots</h4><p>Goa, Thiruvannamalai, Rishikesh, Dharamshala &amp; Bali — where vegans travel most.</p></div></div>
+        <div class="road-item reveal"><div class="road-dot"></div><div><span class="r-tag">Later</span><h4>US, EU &amp; beyond</h4><p>Global expansion once the model and go-to-market are proven.</p></div></div>
+      </div>
+      <div class="geo-card reveal">
+        <div class="quote">"VeganFinds is the first venture where the problem is one I've <span class="hl">lived for 20 years</span>, the community is one I already belong to, and the tech is something my team can build."</div>
+        <div class="by">— Founder, VeganFinds · vegan since 2006</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section class="sec signup" id="signup">
+  <div class="wrap">
+    <div class="signup-grid">
+      <div class="signup-copy reveal">
+        <span class="eyebrow">Be first in line</span>
+        <h2>The app is rolling out soon.</h2>
+        <p>To stay updated, fill out the details below — we'll let you know the moment VeganFinds lands in your city, and give early testers first access.</p>
+        <ul class="signup-list">
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Early access before public launch</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A heads-up when we reach your city</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Zero spam — just rollout news</li>
+        </ul>
+      </div>
+      <div class="signup-card reveal">
+        <div class="form-title">Stay updated</div>
+        <div class="form-sub">Drop your details and we'll keep you posted.</div>
+        <div class="field">
+          <label for="suName">Name</label>
+          <input id="suName" type="text" autocomplete="name" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label for="suMobile">Mobile</label>
+          <input id="suMobile" type="tel" autocomplete="tel" placeholder="e.g. +91 98765 43210" />
+        </div>
+        <div class="field">
+          <label for="suEmail">Email</label>
+          <input id="suEmail" type="email" autocomplete="email" placeholder="you@example.com" />
+        </div>
+        <button class="btn btn-primary" id="suSubmit" type="button" onclick="submitSignup()">Keep me updated</button>
+        <div class="form-msg" id="suMsg"></div>
+        <div class="form-note">By submitting you agree to our <a href="/privacy.html">Privacy Policy</a>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="sec" id="team">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The people behind it</span>
+      <h2>A team that ships — built on lived experience.</h2>
+      <p>Impact-first builders with a track record across assistive tech, AI and design. Incorporated under dVerse Technologies, so we move fast.</p>
+    </div>
+    <div class="team-grid">
+      <div class="member reveal"><div class="avatar" style="background:#f19202">K</div><h3>Krishna</h3><div class="role">Founder · Systems &amp; Product</div><p>Vegan for 20 years. Award-winning impact designer (Boeing Build Awardee, James Dyson Awardee). Connects the dots — dreamer and doer.</p></div>
+      <div class="member reveal"><div class="avatar" style="background:#f7b34d">S</div><h3>Sivagami</h3><div class="role">Chief People Officer</div><p>Leads partnerships, people, community and sales strategy with relentless responsiveness. Vegan for 3 years.</p></div>
+      <div class="member reveal"><div class="avatar" style="background:#ff9f1a">P</div><h3>Pratik</h3><div class="role">Lead Developer</div><p>Coding prodigy who heads full-stack development for VeganFinds.</p></div>
+      <div class="member reveal"><div class="avatar" style="background:#f7b34d">R</div><h3>Raakesh</h3><div class="role">System Architecture</div><p>Designs the system architecture behind VeganFinds — structuring the rule engine, data pipelines and AI so the platform stays robust and scalable as it grows.</p></div>
+      <div class="member reveal"><div class="avatar" style="background:#f19202">M</div><h3>Muthusingam</h3><div class="role">AI Engineer</div><p>Pursuing a master's in AI, the team's go-to AI guy — known for leadership and proactiveness.</p></div>
+      <div class="member reveal"><div class="avatar" style="background:#ff9f1a">N</div><h3>Navaneeth</h3><div class="role">Community &amp; AI</div><p>Bridges between the technology and the people who use it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-wrap" id="download">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="cta-inner">
+        <h2>Your next meal out, sorted.</h2>
+        <p>Join the vegans eating confidently at mainstream restaurants — no labels, no awkwardness, no guesswork. Get VeganFinds.</p>
+        <div class="store-row">
+          <a href="#" class="store-btn">
+            <svg viewBox="0 0 24 24" fill="#f19202"><path d="M3.6 2.3c-.2.2-.3.5-.3.9v17.6c0 .4.1.7.3.9l.1.1 9.9-9.9v-.2L3.6 2.3zM17 15.3l-3.3-3.3 3.3-3.3 4 2.3c1.1.6 1.1 1.7 0 2.3l-4 2zM13.2 11.7l3.3 3.3-9.6 5.5c-.4.2-.8.2-1.1 0l7.4-8.8zM5.8 2.5c.3-.2.7-.2 1.1 0l9.6 5.5-3.3 3.3-7.4-8.8z"/></svg>
+            <span><span class="st-small">Get it on</span><span class="st-big">Google Play</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#top" class="logo">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 26C14 26 4 19 4 11.5C4 7 7.5 4 11 4c1.8 0 3 .9 3 .9S15.2 4 17 4c3.5 0 7 3 7 7.5C24 19 14 26 14 26Z" fill="#f19202"/><path d="M14 25C14 13 9 9 5 8" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Vegan<span class="dot">Finds</span>
+        </a>
+        <p>Eat vegan anywhere — even where the menu doesn't say so. A for-profit social enterprise by dVerse Technologies.</p>
+      </div>
+      <div class="foot-links">
+        <div class="foot-col"><h5>Product</h5><a href="#how">TrustScore</a><a href="#features">Features</a><a href="#download">Download</a></div>
+        <div class="foot-col"><h5>Company</h5><a href="#team">Team</a><a href="#rollout">Rollout</a><a href="#problem">The problem</a><a href="/privacy.html">Privacy Policy</a></div>
+        <div class="foot-col"><h5>Connect</h5><a href="#">Become a contributor</a><a href="#">Partner with us</a><a href="#">Press</a></div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 VeganFinds · dVerse Technologies Pvt Ltd</span>
+      <span>Made with conviction in Auroville 🌱</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js');
+  // sticky nav
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 24));
+
+  // mobile menu
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---- Signup → Google Sheet ----
+  // 1. Follow the setup steps to create your Apps Script web app.
+  // 2. Paste the deployment URL between the quotes below.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwqVJR64SaM54O5GsbxyCOxNnkgLEDwlZy91f1PSkrIUJsyZKXAiqMzvKL_XJm0MzPA/exec";
+
+  async function submitSignup(){
+    const name   = document.getElementById('suName').value.trim();
+    const mobile = document.getElementById('suMobile').value.trim();
+    const email  = document.getElementById('suEmail').value.trim();
+    const msg    = document.getElementById('suMsg');
+    const btn    = document.getElementById('suSubmit');
+
+    const show = (type, text) => { msg.className = 'form-msg ' + type; msg.textContent = text; };
+
+    // validation
+    if(!name || !mobile || !email){ show('err', 'Please fill in all three fields.'); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('err', 'Please enter a valid email address.'); return; }
+    if(!/^[0-9+\-\s()]{7,16}$/.test(mobile)){ show('err', 'Please enter a valid mobile number.'); return; }
+    if(SHEET_ENDPOINT.includes('PASTE_YOUR')){ show('err', 'Form isn\u2019t connected yet — add your Google Sheet URL in the code.'); return; }
+
+    btn.disabled = true;
+    const original = btn.textContent;
+    btn.textContent = 'Sending\u2026';
+    try{
+      const body = new URLSearchParams({ name, mobile, email });
+      await fetch(SHEET_ENDPOINT, { method: 'POST', mode: 'no-cors', body });
+      show('ok', 'You\u2019re on the list! We\u2019ll be in touch. \uD83C\uDF31');
+      document.getElementById('suName').value = '';
+      document.getElementById('suMobile').value = '';
+      document.getElementById('suEmail').value = '';
+    }catch(err){
+      show('err', 'Something went wrong. Please try again in a moment.');
+    }finally{
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  }
+  window.submitSignup = submitSignup;
+
+  // animate trust ring when visible
+  const ring = document.getElementById('ringProg');
+  if (ring){
+    const circ = 540, pct = 0.96;
+    const ro = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting){ ring.style.transition = 'stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1)'; ring.style.strokeDashoffset = circ - circ*pct; ro.unobserve(e.target);} });
+    }, { threshold: 0.4 });
+    ro.observe(ring);
+  }
+</script>
+</body>
+</html>
