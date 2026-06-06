@@ -77,7 +77,9 @@
 
   /* ---------- HERO ---------- */
   .hero{padding:170px 0 90px;overflow:hidden}
-  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:start}
+  .hero-right{display:flex;flex-direction:column;gap:28px;align-items:stretch}
+  .hero-signup{width:100%}
   .hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:700;margin:22px 0 0}
   .hero h1 .hl{color:var(--lime);position:relative}
   .hero .sub{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--muted);max-width:520px;margin:24px 0 34px}
@@ -101,7 +103,7 @@
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(241,146,2,.6)}70%{box-shadow:0 0 0 10px rgba(241,146,2,0)}100%{box-shadow:0 0 0 0 rgba(241,146,2,0)}}
 
   /* phone */
-  .phone-stage{position:relative;display:flex;justify-content:center}
+  .phone-stage{position:relative;display:grid;place-items:center;width:100%}
   .glow{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,247,61,.45),transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(14px);z-index:0}
   .phone{position:relative;z-index:2;width:300px;filter:drop-shadow(0 40px 80px rgba(20,30,15,.45))}
   .float-card{
@@ -250,20 +252,21 @@
   }
 
   /* ---------- RESPONSIVE ---------- */
-  @media(max-width:900px){
-    .hero-grid,.how-grid,.geo-grid,.signup-grid{grid-template-columns:1fr}
-    .phone-stage{order:-1;margin-bottom:20px}
-    .prob-grid,.feat-grid,.team-grid{grid-template-columns:1fr 1fr}
+  @media(max-width:1040px){
     .nav-links{display:none}
     .burger{display:flex}
     .nav-links.open{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);padding:24px;gap:18px;border-bottom:1px solid var(--line)}
+  }
+  @media(max-width:900px){
+    .hero-grid,.how-grid,.geo-grid,.signup-grid{grid-template-columns:1fr}
+    .prob-grid,.feat-grid,.team-grid{grid-template-columns:1fr 1fr}
   }
   @media(max-width:600px){
     .prob-grid,.feat-grid,.team-grid{grid-template-columns:1fr}
     .hero{padding:140px 0 60px}
     .sec{padding:70px 0}
     .cta{padding:42px 28px}
-    .nav-cta .btn-ghost{display:none}
+    .nav-cta .btn{display:none}
     .hero-meta{gap:22px}
     .float-card{display:none}
   }
@@ -283,12 +286,11 @@
       <a href="#how">How it works</a>
       <a href="#features">Features</a>
       <a href="#team">Team</a>
-      <a href="#signup">Stay updated</a>
+      <a href="#top">Stay updated</a>
       <a href="/privacy.html">Privacy</a>
     </div>
     <div class="nav-cta">
-      <a href="#how" class="btn btn-ghost">See the magic</a>
-      <a href="#download" class="btn btn-primary">Get the app</a>
+      <a href="#top" class="btn btn-primary">Join the community</a>
       <div class="burger" id="burger"><span></span><span></span><span></span></div>
     </div>
   </div>
@@ -313,7 +315,28 @@
       </div>
     </div>
 
-    <div class="phone-stage">
+    <div class="hero-right">
+      <div class="signup-card hero-signup reveal">
+        <div class="form-title">The app is rolling out soon</div>
+        <div class="form-sub">Join the community for early updates — be first to know the moment we launch in your city.</div>
+        <div class="field">
+          <label for="heroName">Name</label>
+          <input id="heroName" type="text" autocomplete="name" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label for="heroMobile">Mobile</label>
+          <input id="heroMobile" type="tel" autocomplete="tel" placeholder="e.g. +91 98765 43210" />
+        </div>
+        <div class="field">
+          <label for="heroEmail">Email</label>
+          <input id="heroEmail" type="email" autocomplete="email" placeholder="you@example.com" />
+        </div>
+        <button class="btn btn-primary" id="heroSubmit" type="button" onclick="submitSignup('hero')">Keep me updated</button>
+        <div class="form-msg" id="heroMsg"></div>
+        <div class="form-note">By submitting you agree to our <a href="/privacy.html">Privacy Policy</a>.</div>
+      </div>
+
+      <div class="phone-stage">
       <div class="glow"></div>
       <!-- PHONE (app screen kept as-is) -->
       <svg class="phone" viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VeganFinds app screen">
@@ -371,17 +394,10 @@
         <!-- notch -->
         <rect x="118" y="22" width="64" height="18" rx="9" fill="#0A0D0A"/>
       </svg>
+      </div>
     </div>
   </div>
 </header>
-
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track">
-    <span>Idli</span><span>Lemon rice</span><span>Dosa</span><span>Chana masala</span><span>Aloo gobi</span><span>Sambar</span><span>Coconut chutney</span><span>Veg fried rice</span>
-    <span>Idli</span><span>Lemon rice</span><span>Dosa</span><span>Chana masala</span><span>Aloo gobi</span><span>Sambar</span><span>Coconut chutney</span><span>Veg fried rice</span>
-  </div>
-</div>
 
 <!-- PROBLEM -->
 <section class="sec" id="problem">
@@ -527,43 +543,6 @@
   </div>
 </section>
 
-<!-- SIGNUP -->
-<section class="sec signup" id="signup">
-  <div class="wrap">
-    <div class="signup-grid">
-      <div class="signup-copy reveal">
-        <span class="eyebrow">Be first in line</span>
-        <h2>The app is rolling out soon.</h2>
-        <p>To stay updated, fill out the details below — we'll let you know the moment VeganFinds lands in your city, and give early testers first access.</p>
-        <ul class="signup-list">
-          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Early access before public launch</li>
-          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> A heads-up when we reach your city</li>
-          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f19202" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Zero spam — just rollout news</li>
-        </ul>
-      </div>
-      <div class="signup-card reveal">
-        <div class="form-title">Stay updated</div>
-        <div class="form-sub">Drop your details and we'll keep you posted.</div>
-        <div class="field">
-          <label for="suName">Name</label>
-          <input id="suName" type="text" autocomplete="name" placeholder="Your name" />
-        </div>
-        <div class="field">
-          <label for="suMobile">Mobile</label>
-          <input id="suMobile" type="tel" autocomplete="tel" placeholder="e.g. +91 98765 43210" />
-        </div>
-        <div class="field">
-          <label for="suEmail">Email</label>
-          <input id="suEmail" type="email" autocomplete="email" placeholder="you@example.com" />
-        </div>
-        <button class="btn btn-primary" id="suSubmit" type="button" onclick="submitSignup()">Keep me updated</button>
-        <div class="form-msg" id="suMsg"></div>
-        <div class="form-note">By submitting you agree to our <a href="/privacy.html">Privacy Policy</a>.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- TEAM -->
 <section class="sec" id="team">
   <div class="wrap">
@@ -648,12 +627,13 @@
   // 2. Paste the deployment URL between the quotes below.
   const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwqVJR64SaM54O5GsbxyCOxNnkgLEDwlZy91f1PSkrIUJsyZKXAiqMzvKL_XJm0MzPA/exec";
 
-  async function submitSignup(){
-    const name   = document.getElementById('suName').value.trim();
-    const mobile = document.getElementById('suMobile').value.trim();
-    const email  = document.getElementById('suEmail').value.trim();
-    const msg    = document.getElementById('suMsg');
-    const btn    = document.getElementById('suSubmit');
+  async function submitSignup(prefix){
+    prefix = prefix || 'hero';
+    const name   = document.getElementById(prefix + 'Name').value.trim();
+    const mobile = document.getElementById(prefix + 'Mobile').value.trim();
+    const email  = document.getElementById(prefix + 'Email').value.trim();
+    const msg    = document.getElementById(prefix + 'Msg');
+    const btn    = document.getElementById(prefix + 'Submit');
 
     const show = (type, text) => { msg.className = 'form-msg ' + type; msg.textContent = text; };
 
@@ -670,9 +650,9 @@
       const body = new URLSearchParams({ name, mobile, email });
       await fetch(SHEET_ENDPOINT, { method: 'POST', mode: 'no-cors', body });
       show('ok', 'You\u2019re on the list! We\u2019ll be in touch. \uD83C\uDF31');
-      document.getElementById('suName').value = '';
-      document.getElementById('suMobile').value = '';
-      document.getElementById('suEmail').value = '';
+      document.getElementById(prefix + 'Name').value = '';
+      document.getElementById(prefix + 'Mobile').value = '';
+      document.getElementById(prefix + 'Email').value = '';
     }catch(err){
       show('err', 'Something went wrong. Please try again in a moment.');
     }finally{
