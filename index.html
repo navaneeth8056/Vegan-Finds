@@ -81,6 +81,11 @@
   .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:start}
   .hero-right{display:flex;flex-direction:column;gap:28px;align-items:stretch}
   .hero-signup{width:100%;scroll-margin-top:90px}
+  .apk-divider{display:flex;align-items:center;gap:12px;margin:22px 0 16px;color:var(--muted-2);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em}
+  .apk-divider::before,.apk-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+  .apk-btn{width:100%;justify-content:center;background:transparent;color:var(--lime);border:1.5px solid var(--lime)}
+  .apk-btn:hover{background:var(--lime);color:#fff;transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(241,146,2,.5)}
+  .apk-note{font-size:.78rem;color:var(--muted-2);margin-top:11px;text-align:center}
   .hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:700;margin:22px 0 0}
   .hero h1 .hl{color:var(--lime);position:relative}
   .hero .sub{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--muted);max-width:520px;margin:24px 0 34px}
@@ -338,6 +343,12 @@
         <button class="btn btn-primary" id="heroSubmit" type="button" onclick="submitSignup('hero')">Keep me updated</button>
         <div class="form-msg" id="heroMsg"></div>
         <div class="form-note">By submitting you agree to our <a href="/privacy.html">Privacy Policy</a>.</div>
+        <div class="apk-divider">or get it now</div>
+        <a href="app-release.apk" class="btn apk-btn" download="VeganFinds.apk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Download APK
+        </a>
+        <div class="apk-note">Android only · ~129 MB. After it downloads, open the file to install.</div>
       </div>
 
       <div class="phone-stage">
